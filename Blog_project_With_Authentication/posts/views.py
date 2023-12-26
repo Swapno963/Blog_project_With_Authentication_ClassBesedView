@@ -1,3 +1,4 @@
+from typing import Any
 from django.shortcuts import render,redirect
 from . import forms
 from . import models
@@ -9,7 +10,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 
 from django.utils.decorators import method_decorator
-
+from django.views.generic import DetailView
 # Create your views here.
 @login_required
 def add_post(request):
@@ -70,7 +71,7 @@ class EditPostView(SuccessMessageMixin, UpdateView):
     template_name = 'add_post.html'
     pk_url_kwarg = 'id'
     success_message = 'Post Edited Successfully'
-    success_url = 'profile'
+    success_url = '/author/profile'
 
 
 @method_decorator(login_required, name='dispatch')
@@ -80,3 +81,32 @@ class DeletePostView(SuccessMessageMixin, DeleteView):
     success_message = 'Post Deleted Successfully'
     success_url = reverse_lazy('profile')
     pk_url_kwarg = 'id'
+
+
+
+class DetailPostView(DetailView):
+    model = models.Post
+    template_name = 'post_detail.html'
+
+    def post(self, request, *args, **kwargs):
+        comment_form = forms.CommentForm(self.request.POST)
+        post = self.get_object()
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.post = post
+            new_comment.save()
+        return self.get(request, *args, **kwargs)
+     
+            
+    def get_context_data(self, **kwargs):
+        
+        context = super().get_context_data(**kwargs)
+        post = self.object 
+        comments = post.comments.all()
+        comment_form = forms.CommentForm()
+           
+
+        context['comments'] = comments
+        context['comment_form'] = comment_form
+        return context
+

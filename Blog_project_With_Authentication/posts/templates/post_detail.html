@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="col-12 p-3 container mt-5 ">
+        <div class="card">
+        <div class="card-body">
+        <img style='height:600px; width:100%; ' src="{{post.image.url}}" alt="" class="card-img-top pb-4">
+            <h5 class="card-title">{{post.title}}</h5>
+            <p class="card-text">{{post.content }}</p>
+            <p class='card-text'>Author : {{post.author.first_name}} {{post.author.last_name}}</p>
+            <p>
+                Category : 
+                {% for cat in post.category.all %}
+                <button class='btn btn-warning btn-sm disabled rounded rounded-3'>{{cat.name}}</button>
+                {% endfor%}
+            </p>
+        </div>
+        </div>
+
+
+        
+        {% comment %} take comment input {% endcomment %}
+        {% comment %} show comment {% endcomment %}
+        <div class="card p-2">
+            Total Comments : {{comments | length}}
+            <div class="card-body border m-3">
+                {% for comment in comments %}
+                <p> <b>{{comment.name}}</b>{{comment.body}}</p>
+                <p>{{comment.created_on}}</p>
+                {% endfor %}
+            </div>
+        </div>
+<div class="card p-5 ">
+    <div class="card-body">
+        <form method="post">
+            <h1>Add Comments</h1>
+            {% csrf_token %}
+            {{ comment_form | crispy}}
+            <button class='btn btn-warning'>Submit</button>
+        </form>
+    </div>
+</div>
+
+    </div>
+    
+    
+{% endblock content %}
