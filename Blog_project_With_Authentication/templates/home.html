@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content%}
+    <div class="d-flex justify-content-between align-items-center     container p-4 mt-5">
+        <div class="col-6 pe-5">
+            <h2 class='py-4'>Welcome To Django Blog</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur sunt cumque minus at quisquam assumenda consequatur, magnam impedit
+                <br>
+                <br>
+                 exercitationem numquam eos vitae consectetur provident nulla cum mollitia? Incidunt laboriosam natus, eveniet corporis doloribus sed accusamus possimus repellat, dolor aliquid assumenda, recusandae voluptates laborum voluptatem? Officiis tempora voluptate quasi non, incidunt iure ipsum deleniti ullam vero praesentium cum quis consequatur? Sunt, 
+                 
+                 <br> <br>
+                 maiores repellendus vel facere, quidem architecto porro eveniet voluptatibus, deleniti eaque quibusdam et ut beatae cumque facilis ipsa eligendi minima debitis perferendis id dolorem. Et numquam mollitia voluptatum asperiores excepturi.</p>
+        </div>
+        <div style='padding-left:12rem' class="col-6">
+            <img src="{% static 'top_banner.png'%}" alt="">
+        </div>
+    </div>
+
+
+    <div class="d-flex flex-wrap ms-5">
+        {% comment %} for side bar containing categories {% endcomment %}
+        <div class="col-2 mt-5 pt-5 ps-5 bg-white">
+            <h4>All Categories</h4>
+            {% for cat in category %}
+                <div class="form-check py-2 fs-5 fw-bold">
+                    <label class="form-check-label" for="{{cat.id}}">
+                        <a class='text-decoration-none text-dark' href="{% url 'category_wise_post' cat.slug%}">
+                            <input class="form-check-input" type="radio" name="category" id="{{cat.id}}" />
+                            {{cat.name}}
+                        </a>
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+        {% comment %} posts {% endcomment %}
+        <div class="col-10">
+            <h4 class='mt-5 ms-5'>{{data | length}} Results Found.</h4>
+            <div class="d-flex flex-wrap px-5 m-5 ">
+                {% for post in data%}
+                 <div class="col-sm-4 p-3">
+                     <div class="card">
+                     <div class="card-body">
+                         <h5 class="card-title">{{post.title}}</h5>
+                         <p class="card-text">{{post.content}}</p>
+                         <p class='card-text'>Author : {{post.author.first_name}} {{post.author.last_name}}</p>
+                         <p>
+                             Category : 
+                             {% for cat in post.category.all %}
+                             <button class='btn btn-primary btn-sm disabled rounded rounded-3'>{{cat.name}}</button>
+                             {% endfor%}
+                         </p>
+                     </div>
+                     </div>
+                 </div>
+                {% endfor%}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
