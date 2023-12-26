@@ -3,7 +3,7 @@ from . import forms
 from . import models
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.views.generic import CreateView,UpdateView
+from django.views.generic import CreateView,UpdateView,DeleteView
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 
@@ -67,3 +67,10 @@ class EditPostView(SuccessMessageMixin, UpdateView):
     pk_url_kwarg = 'id'
     success_message = 'Post Edited Successfully'
     success_url = 'profile'
+
+class DeletePostView(SuccessMessageMixin, DeleteView):
+    model = models.Post
+    template_name = 'delete.html'
+    success_message = 'Post Deleted Successfully'
+    success_url = reverse_lazy('profile')
+    pk_url_kwarg = 'id'
