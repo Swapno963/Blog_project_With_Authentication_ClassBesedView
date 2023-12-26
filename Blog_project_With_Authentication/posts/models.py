@@ -11,5 +11,10 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     # author ar account delete kora hola tar post gula automatic delete hoea jabe
 
+    # globally image rakbe
+    # image = models.ImageField(upload_to='uploads/',blank = True, null = True)
+
+    # app ar moddha rakhbe
+    image = models.ImageField(upload_to='posts/media/uploads/',blank = True, null = True)
     def __str__(self) -> str:
         return self.title

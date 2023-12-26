@@ -35,12 +35,13 @@
         </div>
         {% comment %} posts {% endcomment %}
         <div class="col-10">
-            <h4 class='mt-5 ms-5'>{{data | length}} Results Found.</h4>
+            <h4 class='mt-5 ms-5 ps-5'>{{data | length}} Results Found</h4>
             <div class="d-flex flex-wrap px-5 m-5 ">
                 {% for post in data%}
                  <div class="col-sm-4 p-3">
                      <div class="card">
                      <div class="card-body">
+                        <img style='height:300px' src="{{post.image.url}}" alt="" class="card-img-top pb-4">
                          <h5 class="card-title">{{post.title}}</h5>
                          <p class="card-text">{{post.content}}</p>
                          <p class='card-text'>Author : {{post.author.first_name}} {{post.author.last_name}}</p>
