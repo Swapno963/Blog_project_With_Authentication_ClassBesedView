@@ -7,6 +7,9 @@ from django.views.generic import CreateView,UpdateView,DeleteView
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
 
+
+from django.utils.decorators import method_decorator
+
 # Create your views here.
 @login_required
 def add_post(request):
@@ -49,6 +52,7 @@ def delete_post(request, id):
 
 
 # add post useing class based view
+@method_decorator(login_required, name='dispatch')
 class AddPostCreateView(SuccessMessageMixin,CreateView):
     model = models.Post
     form_class = forms.PostForm
@@ -59,7 +63,7 @@ class AddPostCreateView(SuccessMessageMixin,CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
-
+@method_decorator(login_required, name='dispatch')
 class EditPostView(SuccessMessageMixin, UpdateView):
     model = models.Post
     form_class = forms.PostForm
@@ -68,6 +72,8 @@ class EditPostView(SuccessMessageMixin, UpdateView):
     success_message = 'Post Edited Successfully'
     success_url = 'profile'
 
+
+@method_decorator(login_required, name='dispatch')
 class DeletePostView(SuccessMessageMixin, DeleteView):
     model = models.Post
     template_name = 'delete.html'

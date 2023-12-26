@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 
 from posts.models import Post
 
+from django.utils.decorators import method_decorator
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import reverse_lazy
 def register(request):
     if request.method == 'POST':
         register_form = forms.RegistrationForm(request.POST)
@@ -39,6 +42,23 @@ def user_login(request):
     return render(request, 'register.html', {'form':form, 'type':'Login'})
 
 
+class UserLoginView(LoginView):
+    template_name = 'register.html'
+    success_url = reverse_lazy('profile')
+
+    def form_valid(self,form):
+        messages.success(self.request, 'Logged in Successful')
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        messages.success(self.request, 'Logged in Information Incorrect')
+        return super().form_invalid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['type'] = 'Login'
+        return context
+    
 @login_required
 def user_profile(request):
     data = Post.objects.filter(author = request.user)
